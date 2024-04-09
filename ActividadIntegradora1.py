@@ -1,30 +1,32 @@
-import binascii
-
-def leer_y_convertir_a_texto(nombre_archivo):
-    contenido_hex = leer_archivo(nombre_archivo)
-    contenido_hex = contenido_hex.strip()  # Eliminar espacios en blanco al inicio y al final
-    contenido_hex = ''.join(c for c in contenido_hex if c in '0123456789abcdefABCDEF')  # Solo mantener caracteres hexadecimales
-    if len(contenido_hex) % 2 != 0:
-        contenido_hex = '0' + contenido_hex  # Agregar un "0" al principio si la longitud es impar
-    contenido_bytes = binascii.unhexlify(contenido_hex)
-    contenido_texto = contenido_bytes.decode('utf-8')  # Puedes cambiar 'utf-8' según la codificación necesaria
-    return contenido_texto
-
-# Algoritmo para la lectura de archivos
+# Función para leer el contenido de un archivo de texto
 def leer_archivo(nombre_archivo):
     with open(nombre_archivo, 'r') as archivo:
         contenido = archivo.read()
     return contenido
 
-# Ejemplos de uso
-mcode1 = leer_y_convertir_a_texto("mcode01.txt")
-mcode2 = leer_y_convertir_a_texto("mcode02.txt")
-mcode3 = leer_y_convertir_a_texto("mcode03.txt")
+# Función para encontrar el palíndromo más largo en una cadena
+def encontrar_palindromo(cadena):
+    longest_palindrome = ''
+    for i in range(len(cadena)):
+        for j in range(i+1, len(cadena) + 1):
+            substring = cadena[i:j]
+            if substring == substring[::-1] and len(substring) > len(longest_palindrome):
+                longest_palindrome = substring
+    return longest_palindrome
 
-transmission1 = leer_y_convertir_a_texto("transmission01.txt")
-transmission2 = leer_y_convertir_a_texto("transmission02.txt")
 
+# Archivos de transmisión
+transmission1 = leer_archivo("transmission01.txt")
+transmission2 = leer_archivo("transmission02.txt")
 
-# Ejemplo de uso para imprimir el contenido del archivo "transmission01.txt" en texto plano
-transmission1 = leer_y_convertir_a_texto("transmission02.txt")
-print(transmission1)
+# Archivos de mcode
+mcode1 = leer_archivo("mcode01.txt")
+mcode2 = leer_archivo("mcode02.txt")
+mcode3 = leer_archivo("mcode03.txt")
+
+# Buscar palíndromos en los archivos de transmisión
+for transmission, i in zip([transmission1, transmission2], [1, 2]):
+    palindrome = encontrar_palindromo(transmission)
+    start = transmission.find(palindrome) + 1
+    end = start + len(palindrome) - 1
+    print(start, end, end=" ")
